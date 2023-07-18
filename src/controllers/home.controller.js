@@ -46,13 +46,7 @@ const transporter = nodemailer.createTransport({
 });
 
 export const rutaPrincipal = async (req, res) => {
-  const publicPath = path.join(__dirname, '../../../../');
-  
-  // Configurar la carpeta de archivos estáticos
-  app.use(express.static(publicPath));
-  
-  // Enviar el archivo HTML
-  res.sendFile(path.join(publicPath, '/PAGINAS'));
+    res.send("hola mundo :D");
 };
 
 //#region FUNCTIONS

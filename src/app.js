@@ -10,7 +10,7 @@ const app = express();
 
 // configuraciones 
 app.set('port', process.env.PORT || 3000);
-app.set('url', `http://localhost:${app.get('port')}`);
+app.set('url', `esoils.azurewebsites.net:${app.get('port')}`);
 
 
 app.use(bodyParser.urlencoded({ extended: false }));
