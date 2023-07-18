@@ -9,13 +9,15 @@ const app = express();
 
 
 // configuraciones 
-const isProduction = process.env.NODE_ENV === 'production';
-if (isProduction) {
-  app.set('url', 'https://esoils.azurewebsites.net');
-} else {
-  app.set('port', process.env.PORT || 3000);
-  app.set('url', `http://localhost:${app.get('port')}`);
-}
+app.set('url', 'https://esoils.azurewebsites.net');
+
+// const isProduction = process.env.NODE_ENV === 'production';
+// if (isProduction) {
+//   app.set('url', 'https://esoils.azurewebsites.net');
+// } else {
+//   app.set('port', process.env.PORT || 3000);
+//   app.set('url', `http://localhost:${app.get('port')}`);
+// }
 
 
 app.use(bodyParser.urlencoded({ extended: false }));
