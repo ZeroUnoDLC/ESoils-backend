@@ -28,7 +28,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 import { rutaPrincipal, postFisicas, PostRegistro_Suelos, postQuimicas, postClasification, postRegistro_Usuario2, postRegistro_Usuario1,
-    postBiologicas,postBiologicas1,postBiologicasSub1, postBiologicas2, postIdUser, numRegSuelAdd, guardarImg } from "../controllers/home.controller.js";
+    postBiologicas,postBiologicas1, postBiologicas2, postIdUser, numRegSuelAdd, guardarImg, postNomenclature } from "../controllers/home.controller.js";
 
     router.get('/',rutaPrincipal);
 
