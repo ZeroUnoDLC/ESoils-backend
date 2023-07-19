@@ -1,6 +1,6 @@
 import { pool } from '../db.js';
 import pkg from 'body-parser';
-import express from 'express';
+import express, { response } from 'express';
 import crypto from 'crypto';
 import nodemailer from 'nodemailer';
 import { google } from 'googleapis';
@@ -659,7 +659,6 @@ export const postIdUser = async (req, res) => {
         const {
             idcli, passwordcli
         } = req.body;
-
         const resultado = await pool.query(`
         SELECT verificar($1,$2);`,
             [
@@ -667,14 +666,8 @@ export const postIdUser = async (req, res) => {
             ]
         );
         const id_user = resultado.rows[0].verificar;
-        req.session.id_user = id_user;
-
-        if (id_user != null) {
-            //redireccionar a indexhtml
-            res.redirect('http://127.0.0.1:5500/PAGINAS/Index.html');
-        } else {
-            //regresa al login
-        }
+        console.log(id_user);
+        return res.json(id_user);
     } catch (error) {
         console.error("Error en la consulta:", error);
         throw error;
