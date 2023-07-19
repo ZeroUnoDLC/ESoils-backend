@@ -4,13 +4,34 @@ import express, { response } from 'express';
 import crypto from 'crypto';
 import nodemailer from 'nodemailer';
 import { google } from 'googleapis';
-import path from 'path';
 import { fileURLToPath } from 'url'; // Importa el método fileURLToPath
-var ide_suelo;
+import multer from 'multer';
+
+let nombre_archivo;
 const { json, urlencoded } = pkg;
 const app = express();
 app.use(json());
 app.use(urlencoded({ extended: true }));
+
+  
+
+  // Crear una función para convertir una ruta base64 a un buffer
+function base64ToBuffer(base64) {
+    // Eliminar el prefijo "data:image/jpeg;base64,"
+    const data = base64.replace(/^data:image\/jpeg;base64,/, '');
+    // Convertir la cadena base64 a un buffer binario
+    const buffer = Buffer.from(data, 'base64');
+    // Retornar el buffer
+    return buffer;
+  }
+
+  // Crear una función para crear un objeto File a partir de un buffer
+function bufferToFile(buffer, name) {
+    // Crear un objeto File con el buffer, el nombre y el tipo MIME
+    const file = new File([buffer], name, { type: 'image/jpeg' });
+    // Retornar el objeto File
+    return file;
+  }
 
 // Obtiene la ruta absoluta del módulo actual
 const __dirname = fileURLToPath(import.meta.url);
@@ -303,13 +324,13 @@ export const exportIde_suelo = async (req, res, next) => {
 export const PostRegistro_Suelos = async (req, res) => {
     try {
         const {
-            codprov, codcan, soil_picture
+            idcli, codprov, codcan, soil_picture, altitude, latitude, length
         } = req.body;
 
         var ide_suelo = generateUniqueID();
 
         //var idcli = usuario[0];
-        var idcli = "0401751227";
+        //var idcli = "0401751227";
 
         console.log("El tipo es   ", soil_picture);
 
@@ -320,12 +341,12 @@ export const PostRegistro_Suelos = async (req, res) => {
 
         const resultado = await pool.query(`
         INSERT INTO registros_suelos (
-            ide_suelo, idcli, codprov, codcan, soil_picture, active) 
+            ide_suelo, idcli, codprov, codcan, soil_picture, altitude, latitude, length, active) 
             
-        VALUES ($1, $2, $3, $4, $5, $6) 
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) 
         RETURNING *`,
             [
-                ".", idcli, codprov1, codcan1, soil_picture, true
+                ".", idcli, codprov1, codcan1, soil_picture, altitude, latitude, length, true
             ]
         );
 
@@ -335,7 +356,6 @@ export const PostRegistro_Suelos = async (req, res) => {
         console.error("Error en la consulta:", error);
         throw error;
     }
-
 };
 
 // Manejo de la solicitud POST para obtener los datos del formulario Propiedades Físicas
@@ -676,6 +696,50 @@ export const postIdUser = async (req, res) => {
         const id_user = resultado.rows[0].verificar;
         console.log(id_user);
         return res.json(id_user);
+    } catch (error) {
+        console.error("Error en la consulta:", error);
+        throw error;
+    }
+}
+
+// Puedes definir el destino y el nombre de los archivos subidos usando la opción storage 
+
+
+// Luego, creas un middleware de multer usando la opción storage const upload = multer({ storage: storage })
+
+// Finalmente, puedes usar el middleware de multer en tu ruta donde recibes la imagen de Dropzone // En este caso, usamos “/guardarImg” como ruta y “file” como el nombre del campo del archivo 
+
+// app.post("/guardarImg", upload.single("file"), function (req, res) { // Aquí puedes hacer lo que quieras con el archivo subido // Por ejemplo, enviar una respuesta al cliente 
+//     res.send("Archivo guardado con éxito");
+// })
+
+
+
+export const guardarImg = async (req, res) => {
+    try {
+        const fileName = req.file.filename;
+// Get the blob url from the container client
+const blobUrl = containerClient.getBlobUrl(fileName);
+// Send the blob url as a response
+
+// res.send(blobUrl);
+        return res.json(blobUrl);
+    } catch (error) {
+        console.error("Error en la consulta:", error);
+        throw error;
+    }
+}
+
+
+export const numRegSuelAdd = async (req, res) => {
+    try {
+
+        const resultado = await pool.query(`
+        SELECT COUNT(*) FROM registros_suelos;`
+        );
+        const num_suel_add1 = resultado.rows[0].count;
+        console.log(num_suel_add1);
+        return res.json(num_suel_add1);
     } catch (error) {
         console.error("Error en la consulta:", error);
         throw error;
