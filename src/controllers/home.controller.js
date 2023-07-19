@@ -514,7 +514,7 @@ export const postBiologicas = async (req, res) => {
 // Manejo de la solicitud POST para obtener los datos del formulario Propiedades Biologicas1
 export const postBiologicas1 = async (req, res) => {
     try {
-        console.log("------------------------------------------------");
+        console.log("--------------------ORGANISMOS-----------------");
         const { ide_suelo,
         organism,
         number_organism,
@@ -547,6 +547,7 @@ export const postBiologicas1 = async (req, res) => {
 // Manejo de la solicitud POST para obtener los datos del formulario Propiedades Biologicas1
 export const postBiologicas2 = async (req, res) => {
     try {
+        console.log("--------------------MACRO-----------------");
         const {
             ide_suelo,
             macroinvertebrates,
