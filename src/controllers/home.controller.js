@@ -701,6 +701,7 @@ export const postIdUser = async (req, res) => {
         const {
             idcli, passwordcli
         } = req.body;
+        console.log("si entra");
         const resultado = await pool.query(`
         SELECT verificar($1,$2);`,
             [
