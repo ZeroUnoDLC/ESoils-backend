@@ -56,7 +56,14 @@ export const postRegistro_Usuario1 = async (req, res) => {
     try {
         randomNumber = crypto.randomInt(10000, 100000);
         email_ = req.body.email;
-        usuario = [req.body.id_number, req.body.name, req.body.surname, email_, req.body.password, randomNumber];
+        usuario = {
+            id_number: req.body.id_number, 
+            name: req.body.name, 
+            surname: req.body.surname, 
+            email: email_, 
+            password: req.body.password, 
+            randomNumber: randomNumber
+        };
         const emailTemplate = {
             from: 'esoils.inc@gmail.com',
             to: email_,
@@ -182,7 +189,7 @@ export const postRegistro_Usuario1 = async (req, res) => {
                                                                             <tbody>
                                                                                 <tr>
                                                                                     <td align="center" class="esd-block-text">
-                                                                                        <p style="font-family: Garamond, serif; font-size: 20px;"><b>`+ usuario[5] + `</b></p>
+                                                                                        <p style="font-family: Garamond, serif; font-size: 20px;"><b>`+ usuario.randomNumber + `</b></p>
                                                                                     </td>
                                                                                 </tr>
                                                                             </tbody>
@@ -256,7 +263,7 @@ export const postRegistro_Usuario1 = async (req, res) => {
                 console.error(err);
             } else {
                 console.log('Email sent: ' + info.response);
-                res.redirect('http://127.0.0.1:5500/PAGINAS/Sign-up-2.html?x=' + usuario);
+                return res.json(usuario);
             }
         });
 
@@ -266,10 +273,11 @@ export const postRegistro_Usuario1 = async (req, res) => {
     }
 };
 export const postRegistro_Usuario2 = async (req, res) => {
+    usuario=req.body;
     const resultado = await pool.query(`
     INSERT INTO clientes (
         idcli, names_, surnamecli, emailcli, passwordcli)        
-    VALUES ('${usuario[0]}', '${usuario[1]}', '${usuario[2]}', '${usuario[3]}', '${usuario[4]}')`
+        VALUES ('${usuario.id_number}', '${usuario.name}', '${usuario.surname}', '${usuario.email}', '${usuario.password}')`
     );
 
     if (resultado) return res.status(200).json(resultado.rows[0])
@@ -317,7 +325,7 @@ export const PostRegistro_Suelos = async (req, res) => {
         VALUES ($1, $2, $3, $4, $5, $6) 
         RETURNING *`,
             [
-                ide_suelo, idcli, codprov1, codcan1, soil_picture, true
+                ".", idcli, codprov1, codcan1, soil_picture, true
             ]
         );
 
