@@ -615,6 +615,11 @@ export const postClasification = async (req, res) => {
             ]
         );
         console.log("si termina clasificacion");
+        if (resultado){
+            res.status(200).json(true)
+        }else{
+            res.status(200).json(false)
+        }
         if (resultado) return res.status(200).json(resultado.rows[0])
 
     } catch (error) {
@@ -640,6 +645,11 @@ export const postNomenclature = async (req, res) => {
             ]
         );
         console.log("ejecuta hasta nomenclature");
+        if (resultado){
+            res.status(200).json(true)
+        }else{
+            res.status(200).json(false)
+        }
         //if (resultado) return res.status(200).json(resultado.rows[0])
 
     } catch (error) {
