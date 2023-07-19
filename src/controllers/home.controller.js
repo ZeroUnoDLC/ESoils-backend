@@ -581,24 +581,25 @@ export const postBiologicas2 = async (req, res) => {
 export const postClasification = async (req, res) => {
     try {
         const {ide_suelo,
-            orden, suborden, ggroup, sgroup
+            orden, suborden, ggroup, sgroup, nomenclature
         } = req.body;
-
-        console.log("ideeeeeee: "+ide_suelo);
 
         const resultado = await pool.query(`
         INSERT INTO clasification (ide_suelo,
-            orden, suborden, ggroup, sgroup) 
-            
-        VALUES ($1, $2, $3, $4, $5) 
-        RETURNING *`,
+            orden, suborden, ggroup, sgroup)     
+        VALUES ($1, $2, $3, $4, $5);
+            `,
             [
                 ide_suelo,
                 orden, suborden, ggroup, sgroup
             ]
         );
-
-        if (resultado) return res.status(200).json(resultado.rows[0])
+        console.log("si termina clasificacion");
+        if (resultado){
+            res.status(200).json(true)
+        }else{
+            res.status(200).json(false)
+        }
 
     } catch (error) {
         console.error("Error en la consulta:", error);
@@ -606,7 +607,33 @@ export const postClasification = async (req, res) => {
     }
 }
 
-
+// Manejo de la solicitud POST para obtener los datos del formulario Propiedades Quimicas
+export const postNomenclature = async (req, res) => {
+    try {
+        const {
+            ide_suelo,
+            nomenclature
+        } = req.body;
+        console.log(ide_suelo,nomenclature);
+        const resultado = await pool.query(`
+        UPDATE registros_suelos SET nomenclature = $1 WHERE ide_suelo = $2
+        `,
+            [
+                nomenclature,
+                ide_suelo,
+            ]
+        );
+        console.log("ejecuta hasta nomenclature");
+        if (resultado){
+            res.status(200).json(true)
+        }else{
+            res.status(200).json(false)
+        }
+    } catch (error) {
+        console.error("Error en la consulta:", error);
+        throw error;
+    }
+}
 
 
 
@@ -642,23 +669,7 @@ export const postEditProfile = async (req, res) => {
 }
 
 
-/*FUNCIÓN PARA GENERAR UN NUEVO ID QUE NO SE REPITA NUNCA LA DEJAN QUIETA QUE ES PARA EL SUELO*/
-function generateUniqueID() {
-    // Caracteres permitidos para la generación del ID
-    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 
-    // Longitud deseada del ID
-    const idLength = 6;
-
-    let result = '';
-    for (let i = 0; i < idLength; i++) {
-        // Generar un índice aleatorio para obtener un carácter de la cadena de caracteres
-        const randomIndex = Math.floor(Math.random() * characters.length);
-        result += characters.charAt(randomIndex);
-    }
-
-    return "SOIL" + result;
-}
 //#endregion
 ////////////////////////////////////////////////
 //Intento para hacer el login
@@ -681,34 +692,3 @@ export const postIdUser = async (req, res) => {
         throw error;
     }
 }
-
-
-/////////////////////////////////////////////////////
-///////////Posible_codigo///////////////////////////
-// export const postIdUser = async (req, res) => {
-//     try {
-//         const { idcli, passwordcli } = req.body;
-
-//         console.log(idcli, passwordcli);
-//         const resultado = await pool.query(
-//             `
-//         SELECT verificar($1, $2);
-//       `,
-//             [idcli, passwordcli]
-//         );
-//         const id_user = resultado.rows[0].verificar;
-
-//         // Almacena el ID del usuario en la sesión
-//         if (id_user != null) {
-//             req.session.id_user = id_user;
-//             //redireccionar a indexhtml
-//         } else {
-//             //regresa al login
-//         }
-        
-        
-//     } catch (error) {
-//         console.error("Error en la consulta:", error);
-//         throw error;
-//     }
-// }
