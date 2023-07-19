@@ -9,8 +9,6 @@ const app = express();
 
 
 // configuraciones 
-app.set('port', process.env.PORT || 3000);
-app.set('url', `http://localhost:${app.get('port')}`);
 
 // const isProduction = process.env.NODE_ENV === 'production';
 // if (isProduction) {
@@ -33,5 +31,6 @@ app.use(morgan("dev"));
 
 // rutas
 app.use(homeRoutes);
-
+const port = 8080;
+app.listen(port, () => { console.log("localhost:" + port) });
 export default app;
