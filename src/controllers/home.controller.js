@@ -361,7 +361,7 @@ export const PostRegistro_Suelos = async (req, res) => {
 // Manejo de la solicitud POST para obtener los datos del formulario Propiedades Físicas
 export const postFisicas = async (req, res) => {
     try {
-        const {
+        const { ide_suelo,
             apparent_density, real_density, relative_density, maximum_dry_density, compressive_strength,
             thermal_conductivity, liquid, plastic, silt, clay,
             gravel, sand, optimum_moisture_content, plasticity_index, grain_size,
@@ -396,17 +396,18 @@ export const postFisicas = async (req, res) => {
         const rainfall_regime1 = parseFloat(rainfall_regime);
 
         const resultado = await pool.query(`
-        INSERT INTO physical_properties (
+        INSERT INTO physical_properties (ide_suelo,
             apparent_density, real_density, relative_density, maximum_dry_density,compressive_strength,
             thermal_conductivity, liquid, plastic, silt, clay,
             gravel, sand, optimum_moisture_content, plasticity_index, grain_size,
             water_content, color, tensile_strength, porosity, initial_moisture,
             earring, ground_altitude, average_temperature, rainfall_regime) 
             
-        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24) 
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25) 
         RETURNING *`,
 
-            [
+            [   
+                ide_suelo,
                 apparentDensity1, realDensity1, relativeDensity1, maximumDryDensity1, compressiveStrength1,
                 thermal_conductivity1, liquid1, plastic1, silt1, clay1,
                 gravel1, sand1, optimum_moisture_content1, plasticity_index1, grain_size1,
@@ -426,7 +427,7 @@ export const postFisicas = async (req, res) => {
 // Manejo de la solicitud POST para obtener los datos del formulario Propiedades Quimicas
 export const postQuimicas = async (req, res) => {
     try {
-        const {
+        const {ide_suelo,
             alkalinity_or_acidity, organic_material, total_phosphorus,
             extractable_sulfur, interchangeable_aluminum, electric_conductivity, exchangeable_calcium,
             exchangeable_magnesium, exchangeable_potassium, exchangeable_sodium, extractable_copper,
@@ -450,19 +451,19 @@ export const postQuimicas = async (req, res) => {
         const extractable_zinc1 = parseFloat(extractable_zinc);
         const boron1 = parseFloat(boron);
 
-        console.log("El tipo es   ", boron1);
+        console.log(alkalinity_or_acidity1);
 
         const resultado = await pool.query(`
-        INSERT INTO chemical_properties (
+        INSERT INTO chemical_properties (ide_suelo,
             alkalinity_or_acidity, organic_material, total_phosphorus,
             extractable_sulfur, interchangeable_aluminum, electric_conductivity, exchangeable_calcium,
             exchangeable_magnesium, exchangeable_potassium, exchangeable_sodium, extractable_copper,
             removable_iron, extractable_manganese, extractable_zinc, boron) 
             
-        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15) 
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16) 
         RETURNING *`,
-
-            [
+            [   
+                ide_suelo,
                 alkalinity_or_acidity1, organic_material1, total_phosphorus1,
                 extractable_sulfur1, interchangeable_aluminum1, electric_conductivity1, exchangeable_calcium1,
                 exchangeable_magnesium1, exchangeable_potassium1, exchangeable_sodium1, extractable_copper1,
@@ -483,7 +484,7 @@ export const postQuimicas = async (req, res) => {
 // Manejo de la solicitud POST para obtener los datos del formulario Propiedades Biologicas
 export const postBiologicas = async (req, res) => {
     try {
-        const {
+        const { ide_suelo,
             organisms_description,
             microbial_activity,
             microbial_intensity,
@@ -497,7 +498,7 @@ export const postBiologicas = async (req, res) => {
             additional_remarks,
         } = req.body;
 
-        var ide_suelo = "SOILRRDSQw";
+        //var ide_suelo = "SOILRRDSQw";
 
         // Parsear los valores a float
         const average_depth1 = parseFloat(average_depth);
@@ -531,16 +532,15 @@ export const postBiologicas = async (req, res) => {
 }
 
 // Manejo de la solicitud POST para obtener los datos del formulario Propiedades Biologicas1
-export const postBiologicasSub1 = async (req, res) => {
+export const postBiologicas1 = async (req, res) => {
     try {
-        console.log("------------------------------------------------");
-        const {    
+        console.log("--------------------ORGANISMOS-----------------");
+        const { ide_suelo,
         organism,
         number_organism,
         } = req.body;
 
         console.log(organism, number_organism);
-        var ide_suelo = "SOILRRDSQw";//AQUI SERÍA DE PONER EL IDE DEL SUELO XDD
         // Parsear los valores a float
         const number_organism1 = parseFloat(number_organism);
 
@@ -552,8 +552,7 @@ export const postBiologicasSub1 = async (req, res) => {
         VALUES ($1, $2, $3) 
         RETURNING *`,
             [
-                ide_suelo, orga, num
-                /*ide_suelo, organism, number_organism1*/
+                ide_suelo, organism, number_organism1
             ]
         );
 
@@ -568,12 +567,12 @@ export const postBiologicasSub1 = async (req, res) => {
 // Manejo de la solicitud POST para obtener los datos del formulario Propiedades Biologicas1
 export const postBiologicas2 = async (req, res) => {
     try {
+        console.log("--------------------MACRO-----------------");
         const {
+            ide_suelo,
             macroinvertebrates,
             number_macroinvertebrates
         } = req.body;
-
-        var ide_suelo = "SOILRRDSQw";
 
         // Parsear los valores a float
         const number_macroinvertebrates1 = parseFloat(number_macroinvertebrates);
@@ -601,23 +600,21 @@ export const postBiologicas2 = async (req, res) => {
 // Manejo de la solicitud POST para obtener los datos del formulario Propiedades Quimicas
 export const postClasification = async (req, res) => {
     try {
-        const {
-            orden, suborden, ggroup, sgroup
+        const {ide_suelo,
+            orden, suborden, ggroup, sgroup, nomenclature
         } = req.body;
 
-        console.log("El tipo es   ", orden);
-
         const resultado = await pool.query(`
-        INSERT INTO clasification (
-            orden, suborden, ggroup, sgroup) 
-            
-        VALUES ($1, $2, $3, $4) 
-        RETURNING *`,
+        INSERT INTO clasification (ide_suelo,
+            orden, suborden, ggroup, sgroup)     
+        VALUES ($1, $2, $3, $4, $5);
+            `,
             [
+                ide_suelo,
                 orden, suborden, ggroup, sgroup
             ]
         );
-
+        console.log("si termina clasificacion");
         if (resultado) return res.status(200).json(resultado.rows[0])
 
     } catch (error) {
@@ -626,7 +623,30 @@ export const postClasification = async (req, res) => {
     }
 }
 
+// Manejo de la solicitud POST para obtener los datos del formulario Propiedades Quimicas
+export const postNomenclature = async (req, res) => {
+    try {
+        const {
+            ide_suelo,
+            nomenclature
+        } = req.body;
+        console.log(ide_suelo,nomenclature);
+        const resultado = await pool.query(`
+        UPDATE registros_suelos SET nomenclature = $1 WHERE ide_suelo = $2
+        `,
+            [
+                nomenclature,
+                ide_suelo,
+            ]
+        );
+        console.log("ejecuta hasta nomenclature");
+        //if (resultado) return res.status(200).json(resultado.rows[0])
 
+    } catch (error) {
+        console.error("Error en la consulta:", error);
+        throw error;
+    }
+}
 
 
 
@@ -662,23 +682,7 @@ export const postEditProfile = async (req, res) => {
 }
 
 
-/*FUNCIÓN PARA GENERAR UN NUEVO ID QUE NO SE REPITA NUNCA LA DEJAN QUIETA QUE ES PARA EL SUELO*/
-function generateUniqueID() {
-    // Caracteres permitidos para la generación del ID
-    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 
-    // Longitud deseada del ID
-    const idLength = 6;
-
-    let result = '';
-    for (let i = 0; i < idLength; i++) {
-        // Generar un índice aleatorio para obtener un carácter de la cadena de caracteres
-        const randomIndex = Math.floor(Math.random() * characters.length);
-        result += characters.charAt(randomIndex);
-    }
-
-    return "SOIL" + result;
-}
 //#endregion
 ////////////////////////////////////////////////
 //Intento para hacer el login
