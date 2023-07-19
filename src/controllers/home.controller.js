@@ -81,7 +81,7 @@ export const postRegistro_Usuario1 = async (req, res) => {
             id_number: req.body.id_number, 
             name: req.body.name, 
             surname: req.body.surname, 
-            email: email_, 
+            email: email_,
             password: req.body.password, 
             randomNumber: randomNumber
         };
