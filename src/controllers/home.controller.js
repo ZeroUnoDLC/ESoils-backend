@@ -755,20 +755,20 @@ export const postIdUser = async (req, res) => {
 
 
 
-export const guardarImg = async (req, res) => {
-    try {
-        const fileName = req.file.filename;
-// Get the blob url from the container client
-const blobUrl = containerClient.getBlobUrl(fileName);
-// Send the blob url as a response
+// export const guardarImg = async (req, res) => {
+//     try {
+//         const fileName = req.file.filename;
+// // Get the blob url from the container client
+// const blobUrl = containerClient.getBlobUrl(fileName);
+// // Send the blob url as a response
 
-// res.send(blobUrl);
-        return res.json(blobUrl);
-    } catch (error) {
-        console.error("Error en la consulta:", error);
-        throw error;
-    }
-}
+// // res.send(blobUrl);
+//         return res.json(blobUrl);
+//     } catch (error) {
+//         console.error("Error en la consulta:", error);
+//         throw error;
+//     }
+// }
 
 
 export const numRegSuelAdd = async (req, res) => {
