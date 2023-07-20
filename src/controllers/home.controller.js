@@ -324,7 +324,7 @@ export const exportIde_suelo = async (req, res, next) => {
 export const PostRegistro_Suelos = async (req, res) => {
     try {
         const {
-            idcli, codprov, codcan, soil_picture, altitude, latitude, length
+            ide_suelo,idcli, codprov, codcan, soil_picture, altitude, latitude, length
         } = req.body;
 
         //var ide_suelo = generateUniqueID();
@@ -346,7 +346,7 @@ export const PostRegistro_Suelos = async (req, res) => {
         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) 
         RETURNING *`,
             [
-                ".", idcli, codprov1, codcan1, soil_picture, altitude, latitude, length, true
+                ide_suelo, idcli, codprov1, codcan1, soil_picture, altitude, latitude, length, true
             ]
         );
         
@@ -393,7 +393,7 @@ export const postFisicas = async (req, res) => {
             water_content, color, tensile_strength, porosity, initial_moisture,
             earring, ground_altitude, average_temperature, rainfall_regime
         } = req.body;
-
+        console.log("!!!!!!!!!!!!codigo del suelo post fisicas "+ide_suelo);
         // Parsear los valores a float
         const apparentDensity1 = parseFloat(apparent_density);
         const realDensity1 = parseFloat(real_density);
