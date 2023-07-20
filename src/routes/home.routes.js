@@ -29,7 +29,7 @@ const upload = multer({ storage: storage });
 
 import {
     rutaPrincipal, postFisicas, PostRegistro_Suelos, postQuimicas, postClasification, postRegistro_Usuario2, postRegistro_Usuario1,
-    postBiologicas, postBiologicas1, postBiologicas2, postIdUser, numRegSuelAdd, guardarImg, postNomenclature
+    postBiologicas, postBiologicas1, postBiologicas2, postIdUser, numRegSuelAdd, guardarImg, postNomenclature, getNameUser
 } from "../controllers/home.controller.js";
 
 router.get('/', rutaPrincipal);
@@ -47,6 +47,7 @@ router.post('/numRegSuelAdd', numRegSuelAdd);
 // Use upload.single to handle a single file upload
 router.post('/guardarImg', upload.single("file"), guardarImg);
 router.post('/postNomenclature', postNomenclature);
+router.post('/getNameUser', getNameUser);
 router.post('/login', postIdUser);
 
 export default router;

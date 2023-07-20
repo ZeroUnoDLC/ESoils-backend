@@ -309,7 +309,7 @@ export const postRegistro_Usuario2 = async (req, res) => {
 // Manejo de la solicitud POST para obtener los datos del formulario Suelos
 export const exportIde_suelo = async (req, res, next) => {
     try {
-        suelo = generateUniqueID();
+        //suelo = generateUniqueID();
         res.redirect("http://127.0.0.1:5500/PAGINAS/Fisicas-1.html");
         res.redirect("http://127.0.0.1:5500/PAGINAS/Biologicas-1.html");
         res.redirect("http://127.0.0.1:5500/PAGINAS/Quimicas-1.html");
@@ -327,7 +327,7 @@ export const PostRegistro_Suelos = async (req, res) => {
             idcli, codprov, codcan, soil_picture, altitude, latitude, length
         } = req.body;
 
-        var ide_suelo = generateUniqueID();
+        //var ide_suelo = generateUniqueID();
 
         //var idcli = usuario[0];
         //var idcli = "0401751227";
@@ -349,8 +349,33 @@ export const PostRegistro_Suelos = async (req, res) => {
                 ".", idcli, codprov1, codcan1, soil_picture, altitude, latitude, length, true
             ]
         );
-
+        
         if (resultado) return res.status(200).json(resultado.rows[0])
+
+    } catch (error) {
+        console.error("Error en la consulta:", error);
+        throw error;
+    }
+};
+
+export const getNameUser = async (req, res) => {
+    try {
+
+        //var ide_suelo = generateUniqueID();
+
+        //var idcli = usuario[0];
+        //var idcli = "0401751227";
+
+
+
+        //console.log(soil_picture);
+
+        const resultado = await pool.query(`
+        SELECT names_ FROM clientes WHERE idcli='${req.body.idcli}'`
+        );
+        const namecli = resultado.rows[0].verificar;
+        console.log(namecli);
+        return res.json(namecli);
 
     } catch (error) {
         console.error("Error en la consulta:", error);
@@ -750,9 +775,15 @@ export const numRegSuelAdd = async (req, res) => {
     try {
 
         const resultado = await pool.query(`
-        SELECT COUNT(*) FROM registros_suelos;`
+        SELECT COUNT(*)::text FROM registros_suelos
+UNION
+SELECT names_ FROM clientes WHERE idcli='${req.body.idcli}';
+`
         );
-        const num_suel_add1 = resultado.rows[0].count;
+        const num_suel_add1 = {
+            numsuelo: resultado.rows[0].count,
+            namecli: resultado.rows[1].count
+        };
         console.log(num_suel_add1);
         return res.json(num_suel_add1);
     } catch (error) {
